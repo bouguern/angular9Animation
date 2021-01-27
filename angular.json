@@ -119,6 +119,10 @@
           }
         }
       }
-    }},
-  "defaultProject": "angular9Animation"
+    }
+  },
+  "defaultProject": "angular9Animation",
+  "cli": {
+    "analytics": "3debdc54-be8f-48ac-9261-c5ca2bfa3b10"
+  }
 }
