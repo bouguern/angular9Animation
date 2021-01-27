@@ -1,4 +1,6 @@
 <div class="container">
+    <div [ngStyle]="{'border-top':'5px solid black', width:counterValue,'transition':'all 0.1s linear'}">
+    </div>
     <div class="header">
         {{currentIndex +1}} / {{slides.length}}
     </div>
@@ -20,5 +22,4 @@
     
         </div>
     </div>
-   
   </div>

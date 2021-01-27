@@ -1,7 +1,8 @@
 import { animate, animation, style, transition, trigger, useAnimation } from '@angular/animations';
-import { Component, Input, OnInit } from '@angular/core';
+import { Component, HostListener, Input, OnInit } from '@angular/core';
 import { Subscription } from 'rxjs';
 import { IDocuments } from '../helpers/idocuments';
+import { ProgressBarService } from '../services/progress-bar.service';
 
 
 export const fadeIn=animation([
@@ -36,19 +37,30 @@ export class CarouselComponent implements OnInit {
   time=5;
   interval:Subscription;
 
-  constructor() { }
+  constructor(private progressBarService: ProgressBarService) { }
 
-  ngOnInit(): void {
+  ngOnInit() {
+
+    this.initInterval()
+  }
+
+  initInterval(){
+    if(this.interval){this.interval.unsubscribe()}
+    this.interval=this.progressBarService.initInterval(this.time*10).subscribe((d)=>{
+      this.counterValue=d.counterValue + "%";
+      if(d.counterValue===100){
+        this.next()
+      }
+    })
   }
 
   next(){
     if(this.currentIndex<this.slides.length-1){
-      this.currentIndex++
+      this.currentIndex++;
     }else{
       this.currentIndex=0;
     }
-   
-
+    this.initInterval();
   }
 
   pre(){
@@ -57,7 +69,17 @@ export class CarouselComponent implements OnInit {
     }else{
       this.currentIndex=this.slides.length-1;
     }
-  
+    this.initInterval();
+  }
+
+  @HostListener("mouseenter")
+  onMouseEnter(){
+    this.progressBarService.pauseCounter();
+  }
+
+  @HostListener("mouseleave")
+  onMouseLeave(){
+    this.progressBarService.resumeCounter();
   }
 
 }
